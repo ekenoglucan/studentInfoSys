@@ -4,7 +4,7 @@ COPY .. /app/source
 RUN mvn clean package -DskipTests=true
 
 FROM openjdk:11 as runner
-WORKDIR /app
+WORKDIR /app/source
 COPY --from=builder /app/source/target/demo-0.0.1-SNAPSHOT.jar .
 EXPOSE 8080
 CMD ["java" , "-jar", "demo-0.0.1-SNAPSHOT.jar"]
