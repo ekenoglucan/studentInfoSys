@@ -1,0 +1,49 @@
+# ... Deployment YAML definition
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sis-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sis-demo
+  template:
+    metadata:
+      labels:
+        app: sis-demo
+    spec:
+      containers:
+        - name: spring-sis-demo
+          image: ekenoglucan/k8s-deneme:v1
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: sis-config
+                  key: spring_datasource_url
+---
+# ... Service YAML definition
+apiVersion: v1
+kind: Service
+metadata:
+  name: sis-service
+spec:
+  selector:
+    app: sis-demo
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30005
+  type: NodePort
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sis-config
+data:
+  spring_datasource_url: 'jdbc:postgresql://postgre-service:5432/sis_demo?createDatabaseIfNotExist=true'
+
