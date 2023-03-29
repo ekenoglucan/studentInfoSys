@@ -34,7 +34,7 @@ jobs:
       with:
         image: ekenoglucan/k8s-deneme
         tags: v1
-        registry: registry-url.io
+        registry: docker.io
         dockerfile: Dockerfile
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
